@@ -1,0 +1,73 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: Tcc@1234
+      MYSQL_DATABASE: ecommerce
+      MYSQL_USER: tcc
+      MYSQL_PASSWORD: Tcc@1234
+    ports:
+      # <Port exposed> : <MySQL Port running inside container>
+      - '3307:3306'
+    expose:
+      # Opens port 3306 on the container
+      - '3306'
+    networks:
+      - tcc-network
+    volumes:
+      - ./data:/var/lib/mysql
+
+  images-server:
+    image: nginx
+    volumes:
+      - ./images:/usr/share/nginx/html
+    ports:
+      - "80:80"
+    networks:
+    - tcc-network
+
+  back-end:
+    build: ./back-end
+    volumes:
+      - ./images:/app/images
+    ports:
+      # <Port exposed> : <MySQL Port running inside container>
+      - '3000:3000'
+    expose:
+      - '3000'
+    restart: always
+    depends_on:
+      - db
+      - images-server
+    networks:
+      - tcc-network
+    environment:
+      DB_HOST: db
+      DB_USER: tcc
+      DB_PASSWORD: Tcc@1234
+      DB_NAME: ecommerce
+
+  # vue-front:
+  #   build: ./vue-front
+  #   restart: always
+  #   depends_on:
+  #     - back-end
+
+  # react-front:
+  #   build: ./react-front
+  #   restart: always
+  #   depends_on:
+  #     - back-end
+
+  # angular-front:
+  #   build: ./angular-front
+  #   restart: always
+  #   depends_on:
+  #     - back-end
+
+networks:
+  tcc-network:
+    driver: bridge
