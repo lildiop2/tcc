@@ -1,0 +1,33 @@
+<main>
+  <div class="container">
+  <div class="row justify-content-center mt-2" >
+  <button  type="button" class="btn btn-primary mx-2 px-4" (click)="createProduct(1000)" >Create 1000</button>
+  <button  type="button" class="btn btn-secondary mx-2 px-4" (click)="readProduct(1000,$event)" >Read 1000</button>
+  <button  type="button" class="btn btn-info mx-2 px-4" (click)="updateProduct(1000)">Update 1000</button>
+  <button  type="button" class="btn btn-danger mx-2 px-4" (click)="deleteProduct(1000)">Delete 1000</button>
+</div>
+<div class="row justify-content-center mt-2" >
+  <button  type="button" class="btn btn-primary mx-2 px-4" (click)="createProduct(5000)">Create 5000</button>
+  <button  type="button" class="btn btn-secondary mx-2 px-4" (click)="readProduct(5000,$event)" >Read 5000</button>
+  <button  type="button" class="btn btn-info mx-2 px-4" (click)="updateProduct(5000)">Update 5000</button>
+  <button  type="button" class="btn btn-danger mx-2 px-4" (click)="deleteProduct(5000)">Delete 5000</button>
+</div>
+<div class="row justify-content-center mt-2" >
+  <button  type="button" class="btn btn-primary mx-1 px-4" (click)="createProduct(10000)">Create 10000</button>
+  <button  type="button" class="btn btn-secondary mx-1 px-4" (click)="readProduct(10000,$event)" >Read 10000</button>
+  <button  type="button" class="btn btn-info mx-1 px-4" (click)="updateProduct(10000)">Update 10000</button>
+  <button  type="button" class="btn btn-danger mx-1 px-4" (click)="deleteProduct(10000)">Delete 10000</button>
+</div>
+</div>
+<hr class="py-1  bg-dark">
+<div class="container" >
+  <h1 *ngIf="produtos.length !== 0" class="row justify-content-center">Lista de produtos E-commerce</h1>
+  <div class="d-flex flex-wrap">
+    <div *ngFor="let produto of produtos" class="col-3 mb-2">
+        <app-produto [produto]="produto"></app-produto>
+  </div>
+
+  </div>
+
+</div>
+</main>

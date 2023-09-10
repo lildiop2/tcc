@@ -1,7 +1,11 @@
 {
-    "DB_HOST": "127.0.0.1",
-    "DB_PORT": "3307",
-    "DB_USER": "tcc",
-    "DB_PASSWORD": "Tcc@1234",
-    "DB_NAME": "ecommerce"
+   "env":{
+    "DB_HOST": "localhost",
+    "DB_PORT": "3306",
+    "DB_USER": "root",
+    "DB_PASSWORD": "Metodo@7195",
+    "DB_NAME": "ecommerce",
+    "JWT_SECRET": "84TI$su7TXEZ!0g#lT",
+    "SERVER_URL":"http://localhost:8080"
+   }
 }

@@ -1,78 +1,70 @@
+'use strict';
 const express = require('express');
-require('dotenv').config();
-const mysql = require('mysql2/promise');
-const morgan = require('morgan')
-const {sequelize}=require('./db/sequelize');
-
 const app = express();
-app.use(express.json());
+const morgan = require('morgan');
+const bodyParser = require('body-parser');
+const cors = require('cors')
+const fs = require('fs');
+const path = require('path');
+const jwt = require('jsonwebtoken');
+
+//aqui vão as variáveis de rotas
+const usuarioRoute = require('./routes/usuarioRoute');
+const produtoRoute = require('./routes/produtoRoute');
+const categoriaRoute = require('./routes/categoriaRoute');
+const carrinhoRoute = require('./routes/carrinhoRoute');
+const pedidoRoute = require('./routes/pedidoRoute');
+
+//aplicando CORS
+app.use(cors());
+app.use(express.static('public'))
 app.use(morgan('dev'));
+app.use(bodyParser.urlencoded({limit: '50mb', extended:true})); //apenas dados simples
+app.use(bodyParser.json({limit: '50mb'})); // apenas json de entrada no body
 
-app.get('/produtos', async (req, res) => {
-  try {
-    const [rows] = await sequelize.query('SELECT * FROM produtos');
-    res.json(rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Erro interno do servidor' });
-  }
-});
+//Middlewares
 
-app.get('/produtos/:id', async (req, res) => {
-  try {
-    const [rows] = await sequelize.query('SELECT * FROM produtos WHERE id = ?', [req.params.id]);
-    if (rows.length === 0) {
-      res.status(404).json({ message: 'Produto não encontrado' });
-    } else {
-      res.json(rows[0]);
+
+
+
+//aqui vão as rotas
+app.use('/api', usuarioRoute);
+app.use('/api', produtoRoute);
+app.use('/api', categoriaRoute);
+app.use('/api', carrinhoRoute);
+app.use('/api', pedidoRoute);
+
+
+
+
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization,');
+
+    if (req.method === 'OPTIONS') {
+        res.header('Access-Control-Allow-Methods', "OPTIONS,GET,POST,PUT,DELETE");
+        return res.status(200).send({
+            //retorna um objeto vazio
+        });
     }
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Erro interno do servidor' });
-  }
+    next();
+
 });
 
-app.post('/produtos', async (req, res) => {
-  try {
-    const [result] = await sequelize.query('INSERT INTO produtos SET ?', req.body);
-    const [rows] = await sequelize.query('SELECT * FROM produtos WHERE id = ?', [result.insertId]);
-    res.status(201).json(rows[0]);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Erro interno do servidor' });
-  }
+//quando não encontrar rota, entra aqui
+app.use((req, res, next) => {
+    const err = new Error('Não encontrado!');
+    err.status = 404;
+
+    next(err);
+
 });
 
-app.put('/produtos/:id', async (req, res) => {
-  try {
-    const [result] = await sequelize.query('UPDATE produtos SET ? WHERE id = ?', [req.body, req.params.id]);
-    if (result.affectedRows === 0) {
-      res.status(404).json({ message: 'Produto não encontrado' });
-    } else {
-      const [rows] = await sequelize.query('SELECT * FROM produtos WHERE id = ?', [req.params.id]);
-      res.json(rows[0]);
-    }
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Erro interno do servidor' });
-  }
+
+// handle error, print stacktrace
+app.use((err, req, res, next) => {
+    res.status(err.status || 500);
+    res.json({ status: err.status, message: err.message });
 });
 
-app.delete('/produtos/:id', async (req, res) => {
-  try {
-    const [result] = await sequelize.query('DELETE FROM produtos WHERE id = ?', [req.params.id]);
-    if (result.affectedRows === 0) {
-      res.status(404).json({ message: 'Produto não encontrado' });
-    } else {
-      res.sendStatus(204);
-    }
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Erro interno do servidor' });
-  }
-});
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
- console.log(`Servidor iniciado na porta ${PORT}`);
-});
+module.exports = app;
