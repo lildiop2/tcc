@@ -2,13 +2,14 @@ version: '3'
 
 services:
   db:
+    container_name: db
     image: mysql:5.7
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: Tcc@1234
+      MYSQL_ROOT_PASSWORD: Metodo@7195
       MYSQL_DATABASE: ecommerce
       MYSQL_USER: tcc
-      MYSQL_PASSWORD: Tcc@1234
+      MYSQL_PASSWORD: Metodo@7195
     ports:
       # <Port exposed> : <MySQL Port running inside container>
       - '3307:3306'
@@ -20,34 +21,26 @@ services:
     volumes:
       - ./data:/var/lib/mysql
 
-  images-server:
-    image: nginx
-    volumes:
-      - ./images:/usr/share/nginx/html
-    ports:
-      - "80:80"
-    networks:
-    - tcc-network
 
   back-end:
+    container_name: backend
     build: ./back-end
     volumes:
-      - ./images:/app/images
+      - ./images:/public/images/produto:rw
     ports:
       # <Port exposed> : <MySQL Port running inside container>
-      - '3000:3000'
+      - '8080:8080'
     expose:
-      - '3000'
+      - '8080'
     restart: always
     depends_on:
       - db
-      - images-server
     networks:
       - tcc-network
     environment:
       DB_HOST: db
-      DB_USER: tcc
-      DB_PASSWORD: Tcc@1234
+      DB_USER: root
+      DB_PASSWORD: Metodo@7195
       DB_NAME: ecommerce
 
   # vue-front:
