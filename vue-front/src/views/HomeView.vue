@@ -52,6 +52,7 @@ export default {
       t0:0,
       t1:0,
       caregado:{},
+      apiUrl:`${import.meta.env.VITE_API_URL}`
     }
   },
   methods: {
@@ -84,7 +85,7 @@ export default {
             for (let i = 0; i < count; i++){
               //escolha um produto aleatorio para cadastrar
               let randomNumber=Math.floor(Math.random() * (1499 - 0 + 1)) + 0;
-                fetch("http://localhost:8080/api/produto", {
+                fetch(this.apiUrl+"/api/produto", {
                   method: "POST",
                   headers: {'Content-Type': 'application/json'},
                   body: JSON.stringify({
@@ -114,7 +115,7 @@ export default {
       // this.t0=event.timeStamp;
       // console.log('inicio :>> ', inicio);
       // Lógica para ler 1000 registros
-      const response = await fetch("http://localhost:8080/api/produtos/?quantidade="+count,{
+      const response = await fetch(this.apiUrl+"/api/produtos/?quantidade="+count,{
         method: "GET", // *GET, POST, PUT, DELETE, etc.
         headers: {
         "Content-Type": "application/json",
@@ -142,7 +143,7 @@ export default {
 
           const blob = await img.blob();
           
-        fetch("http://localhost:8080/api/produto/"+this.produtos[i].id, {
+        fetch(this.apiUrl+"/api/produto/"+this.produtos[i].id, {
                   method: "PUT",
                   headers: {'Content-Type': 'application/json'},
                   body: JSON.stringify({
@@ -168,7 +169,7 @@ export default {
           });
       while (this.produtos.length>0) {
         const produto = this.produtos.shift();
-       fetch("http://localhost:8080/api/produto/"+produto.id, {
+       fetch(this.apiUrl+"/api/produto/"+produto.id, {
                   method: "DELETE",
                 });
         // this.produtos.splice(i,1);

@@ -65,11 +65,16 @@ services:
     depends_on:
       - back-end
 
-  # angular-front:
-  #   build: ./angular-front
-  #   restart: always
-  #   depends_on:
-  #     - back-end
+  angular-front:
+    container_name: angular-front
+    build: ./angular-front
+    ports:
+      - '3001:3001'
+    expose:
+      - '3001'
+    restart: always
+    depends_on:
+      - back-end
 
 networks:
   tcc-network:

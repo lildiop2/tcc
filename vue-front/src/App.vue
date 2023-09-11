@@ -4,13 +4,6 @@ import HomeView from './views/HomeView.vue'
 </script>
 
 <template>
-  <header class="mt-4">
-
-    <!-- <div class="wrapper">
-      <Menu></Menu>
-    </div> -->
-  </header>
-
   <HomeView />
 </template>
 

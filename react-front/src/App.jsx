@@ -4,6 +4,7 @@ import {fileOpen } from 'browser-fs-access';
 
 function App() {
   const [produtos, setProdutos] = useState([])
+  const apiUrl=`${import.meta.env.VITE_API_URL}`;
 
   const createProduct=async (count)=> {
     // Lógica para criar 1000 registros
@@ -34,7 +35,7 @@ function App() {
           for (let i = 0; i < count; i++){
             //escolha um produto aleatorio para cadastrar
             let randomNumber=Math.floor(Math.random() * (1499 - 0 + 1)) + 0;
-              fetch("http://localhost:8080/api/produto", {
+              fetch(apiUrl+"/api/produto", {
                 method: "POST",
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
@@ -64,7 +65,7 @@ function App() {
     // this.t0=event.timeStamp;
     // console.log('inicio :>> ', inicio);
     // Lógica para ler 1000 registros
-    const response = await fetch("http://localhost:8080/api/produtos/?quantidade="+count,{
+    const response = await fetch(apiUrl+"/api/produtos/?quantidade="+count,{
       method: "GET", // *GET, POST, PUT, DELETE, etc.
       headers: {
       "Content-Type": "application/json",
@@ -92,7 +93,7 @@ function App() {
 
         const blob = await img.blob();
         
-      fetch("http://localhost:8080/api/produto/"+produtos[i].id, {
+      fetch(apiUrl+"/api/produto/"+produtos[i].id, {
                 method: "PUT",
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
@@ -120,7 +121,7 @@ function App() {
     while (newProdutos.length>0) {
       const produto = newProdutos.shift();
       setProdutos(newProdutos);
-     fetch("http://localhost:8080/api/produto/"+produto.id, {
+     fetch(apiUrl+"/api/produto/"+produto.id, {
                 method: "DELETE",
               });
       // produtos.splice(i,1);

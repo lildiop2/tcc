@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component,Inject } from '@angular/core';
+import { environment } from 'src/environments/environment.development';
 import {fileOpen,
   directoryOpen,
   fileSave,
@@ -7,10 +8,12 @@ import {fileOpen,
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
+  providers: [{ provide: 'API_URL', useValue: environment.ApiUrl }]
 })
 export class AppComponent {
   title = 'angular-front';
+  public apiUrl: string = environment.ApiUrl;
   produtos:{id:number,nome:string,desc:string,preco:number,imagem:string}[]=[];
 
   constructor(private window: Window) {
@@ -48,7 +51,7 @@ export class AppComponent {
           for (let i = 0; i < count; i++){
             //escolha um produto aleatorio para cadastrar
             let randomNumber=Math.floor(Math.random() * (1499 - 0 + 1)) + 0;
-              fetch("http://localhost:8080/api/produto", {
+              fetch(this.apiUrl+"/api/produto", {
                 method: "POST",
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
@@ -78,7 +81,7 @@ export class AppComponent {
     // this.t0=event.timeStamp;
     // console.log('inicio :>> ', inicio);
     // Lógica para ler 1000 registros
-    const response = await fetch("http://localhost:8080/api/produtos/?quantidade="+count,{
+    const response = await fetch(this.apiUrl+"/api/produtos/?quantidade="+count,{
       method: "GET", // *GET, POST, PUT, DELETE, etc.
       headers: {
       "Content-Type": "application/json",
@@ -106,7 +109,7 @@ export class AppComponent {
 
         const blob = await img.blob();
 
-      fetch("http://localhost:8080/api/produto/"+this.produtos[i]?.id, {
+      fetch(this.apiUrl+"/api/produto/"+this.produtos[i]?.id, {
                 method: "PUT",
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
@@ -132,7 +135,7 @@ export class AppComponent {
         });
     while (this.produtos.length>0) {
       const produto = this.produtos.shift();
-     fetch("http://localhost:8080/api/produto/"+produto?.id, {
+     fetch(this.apiUrl+"/api/produto/"+produto?.id, {
                 method: "DELETE",
               });
       // this.produtos.splice(i,1);
