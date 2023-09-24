@@ -23,19 +23,14 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended:true})); //apenas dados s
 app.use(bodyParser.json({limit: '50mb'})); // apenas json de entrada no body
 
 //Middlewares
-
-
-
-
-//aqui vão as rotas
-app.use('/api', usuarioRoute);
-app.use('/api', produtoRoute);
-app.use('/api', categoriaRoute);
-app.use('/api', carrinhoRoute);
-app.use('/api', pedidoRoute);
-
-
-
+//remove cache
+app.use((req, res, next) => {
+    res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+    res.header('Expires', '-1');
+    res.header('Pragma', 'no-cache');
+    res.header('Surrogate-Control', 'no-store');
+    next()
+});
 
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -50,6 +45,13 @@ app.use((req, res, next) => {
     next();
 
 });
+
+//aqui vão as rotas
+app.use('/api', usuarioRoute);
+app.use('/api', produtoRoute);
+app.use('/api', categoriaRoute);
+app.use('/api', carrinhoRoute);
+app.use('/api', pedidoRoute);
 
 //quando não encontrar rota, entra aqui
 app.use((req, res, next) => {

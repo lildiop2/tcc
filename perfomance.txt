@@ -1,0 +1,7 @@
+- Primeira pintura com conteúdo 
+- Tempo total de bloqueio 
+- Índice de velocidade 
+- Pintura com maior conteúdo 
+- Desempenho geral 
+- Tamanho do pacote 
+- Consumo de memoria
