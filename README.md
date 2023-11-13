@@ -6,7 +6,7 @@ O objetivo deste experimento é comparar os frameworks Angular, React e Vue em t
 
 Os frameworks utilizados no experimento foram:
 
-- Angular 18
+- Angular 16
 - React 18
 - Vue.js 3
 
@@ -37,11 +37,11 @@ cd angular-front
 npm install
 npm start
 
-cd react
+cd react-front
 npm install
 npm start
 
-cd vue
+cd vue-front
 npm install
 npm start
 ```
